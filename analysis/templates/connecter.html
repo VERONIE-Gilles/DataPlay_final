@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connexion - DataPlay</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+  </head>
+  <body class="auth-page">
+    <header class="header">
+      <div class="container">
+        <h1 class="logo-text"><a href="{% url 'home' %}">DataPlay</a></h1>
+      </div>
+    </header>
+
+    <div class="auth-container">
+      <div class="auth-title">
+        <h2>Bon retour !</h2>
+        <p>Connectez-vous à votre compte DataPlay</p>
+      </div>
+
+      <div class="auth-card">
+        <div class="auth-card-inner">
+          {% if messages %}
+            {% for message in messages %}
+              <div class="auth-message error" style="display: block;">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          <form class="auth-form" method="POST" action="{% url 'connecter' %}">
+            {% csrf_token %}
+            
+            <div class="auth-input-group">
+              <label for="email">Adresse email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="auth-input"
+                placeholder="votre@email.com"
+                required
+              />
+            </div>
+
+            <div class="auth-input-group">
+              <label for="password">Mot de passe</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                class="auth-input"
+                placeholder="••••••••"
+                required
+              />
+            </div>
+
+            <div class="remember-forgot">
+              <label class="remember-me">
+                <input type="checkbox" id="remember" name="remember" />
+                <span>Se souvenir de moi</span>
+              </label>
+              <a href="#" class="forgot-password">Mot de passe oublié ?</a>
+            </div>
+
+            <button type="submit" class="auth-submit-btn">
+              <span>Se connecter</span>
+            </button>
+          </form>
+
+          <div class="auth-footer">
+            Vous n'avez pas de compte ?
+            <a href="{% url 'register' %}">S'inscrire</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

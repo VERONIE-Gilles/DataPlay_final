@@ -1,0 +1,224 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>DataPlay - Engagement par Langue</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo-container">
+                <a href="{% url 'home' %}" class="logo-button">
+                    <h1 class="logo-text">DataPlay</h1>
+                </a>
+            </div>
+            <nav class="nav">
+                <a href="{% url 'home' %}" class="nav-link">Accueil</a>
+                
+                
+                {% if user.is_authenticated %}
+                    <span class="nav-link" style="color: var(--accent-blue);">Bonjour, {{ user.first_name }}!</span>
+                    <form method="post" action="{% url 'logout' %}" style="margin: 0; display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link">Déconnexion</button>
+                    </form>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">🌍 Engagement par Langue</h2>
+
+            <!-- Statistics Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+                <div class="insight-card" style="text-align: center; background: var(--card-bg); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--card-border);">
+                    <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem; font-size: 0.95rem;">🗣️ Langues Analysées</h4>
+                    <p style="font-size: 2rem; font-weight: bold; color: var(--text-white); margin: 0;">{{ stats.total_languages }}</p>
+                </div>
+                
+                <div class="insight-card" style="text-align: center; background: var(--card-bg); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--card-border);">
+                    <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem; font-size: 0.95rem;">🎮 Jeux Analysés</h4>
+                    <p style="font-size: 2rem; font-weight: bold; color: var(--text-white); margin: 0;">{{ stats.total_games|floatformat:0 }}</p>
+                </div>
+                
+                <div class="insight-card" style="text-align: center; background: var(--card-bg); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--card-border);">
+                    <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem; font-size: 0.95rem;">👑 Langue #1</h4>
+                    <p style="font-size: 1.5rem; font-weight: bold; color: var(--text-white); margin: 0;">{{ stats.top_language }}</p>
+                    <p style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">{{ stats.top_language_share|floatformat:1 }}% d'engagement</p>
+                </div>
+                
+                <div class="insight-card" style="text-align: center; background: var(--card-bg); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--card-border);">
+                    <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem; font-size: 0.95rem;">⭐ Top 3 Langues</h4>
+                    <p style="font-size: 2rem; font-weight: bold; color: var(--text-white); margin: 0;">{{ stats.top_3_cumulative|floatformat:0 }}%</p>
+                    <p style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">de l'engagement total</p>
+                </div>
+            </div>
+
+            <!-- Chart 1: Language Engagement Bar Chart -->
+            <div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 15px; padding: 2rem; margin-bottom: 2rem;">
+                {{ chart1|safe }}
+            </div>
+            
+            <div class="insight-card">
+                <h4>💡 Points Clés : Engagement par Langue</h4>
+                <ul class="insight-list">
+                    <li>
+                        <strong>{{ stats.top_language }}</strong> domine avec {{ stats.top_language_share|floatformat:1 }}% 
+                        de l'engagement total des joueurs
+                    </li>
+                    <li>
+                        Les <strong>3 premières langues</strong> représentent {{ stats.top_3_cumulative|floatformat:0 }}% 
+                        de l'engagement mondial
+                    </li>
+                    <li>
+                        La <strong>concentration</strong> de l'engagement est très élevée sur quelques langues majeures
+                    </li>
+                    <li>
+                        L'engagement mesure le nombre total de <strong>reviews</strong> dans chaque langue
+                    </li>
+                    <li>
+                        Les barres cyan indiquent les langues avec le plus fort engagement
+                    </li>
+                </ul>
+                <p class="insight-note">
+                    💡 Ce graphique montre l'activité réelle des joueurs par langue. 
+                    Plus d'engagement = plus de joueurs actifs et engagés!
+                </p>
+            </div>
+
+            <!-- Chart 2: Pie Chart -->
+            <div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 15px; padding: 2rem; margin: 3rem 0 2rem 0;">
+                {{ chart2|safe }}
+            </div>
+
+            <div class="insight-card">
+                <h4>💡 Points Clés : Répartition de l'Engagement</h4>
+                <ul class="insight-list">
+                    <li>
+                        Le graphique circulaire visualise la <strong>part relative</strong> de chaque langue
+                    </li>
+                    <li>
+                        Quelques langues dominent clairement le marché global des jeux indie
+                    </li>
+                    <li>
+                        Les développeurs doivent <strong>prioriser</strong> les langues avec le plus fort engagement
+                    </li>
+                    <li>
+                        La localisation dans les <strong>top 5 langues</strong> couvre {{ stats.top_5_cumulative|floatformat:0 }}% du marché
+                    </li>
+                    <li>
+                        Les langues de niche représentent une opportunité pour des marchés spécifiques
+                    </li>
+                </ul>
+                <p class="insight-note">
+                    💡 Cliquez sur les langues dans la légende pour les masquer/afficher. 
+                    Passez la souris pour voir les chiffres exacts!
+                </p>
+            </div>
+
+            <!-- Chart 3: Cumulative Engagement -->
+            <div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 15px; padding: 2rem; margin: 3rem 0 2rem 0;">
+                {{ chart3|safe }}
+            </div>
+
+            <div class="insight-card">
+                <h4>💡 Points Clés : Engagement Cumulé</h4>
+                <ul class="insight-list">
+                    <li>
+                        Ce graphique montre comment l'engagement s'accumule avec chaque langue ajoutée
+                    </li>
+                    <li>
+                        Les <strong>premières langues</strong> contribuent de manière disproportionnée à l'engagement total
+                    </li>
+                    <li>
+                        Atteindre <strong>50% d'engagement</strong> ne nécessite que quelques langues principales
+                    </li>
+                    <li>
+                        Pour couvrir <strong>80% du marché</strong>, un nombre limité de langues suffit
+                    </li>
+                    <li>
+                        La courbe illustre la <strong>loi de Pareto</strong> (principe 80/20) dans l'engagement linguistique
+                    </li>
+                </ul>
+                <p class="insight-note">
+                    💡 Ce graphique aide à décider combien de langues localiser pour un ROI optimal. 
+                    Les lignes pointillées montrent les seuils de 50% et 80% d'engagement.
+                </p>
+            </div>
+
+            <!-- Chart 4: Game Count by Language -->
+            <div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 15px; padding: 2rem; margin: 3rem 0 2rem 0;">
+                {{ chart4|safe }}
+            </div>
+
+            <div class="insight-card">
+                <h4>💡 Points Clés : Disponibilité des Jeux par Langue</h4>
+                <ul class="insight-list">
+                    <li>
+                        <strong>{{ stats.most_common_language }}</strong> est la langue la plus courante 
+                        avec {{ stats.most_common_count|floatformat:0 }} jeux disponibles
+                    </li>
+                    <li>
+                        Ce graphique montre la <strong>disponibilité</strong> des jeux, 
+                        pas nécessairement l'engagement
+                    </li>
+                    <li>
+                        Une langue avec beaucoup de jeux peut avoir <strong>moins d'engagement</strong> 
+                        qu'une langue avec moins de jeux mais plus populaire
+                    </li>
+                    <li>
+                        Les développeurs tendent à localiser dans les langues <strong>les plus accessibles</strong>
+                    </li>
+                    <li>
+                        Comparez avec le premier graphique pour voir la différence entre disponibilité et engagement
+                    </li>
+                </ul>
+                <p class="insight-note">
+                    💡 La disponibilité ne garantit pas l'engagement! 
+                    Certaines langues sont sur-représentées mais sous-performantes.
+                </p>
+            </div>
+
+            <!-- Summary Insight -->
+            <div class="insight-card" style="margin-top: 3rem; background: linear-gradient(135deg, rgba(30, 144, 255, 0.15), rgba(0, 212, 255, 0.15)); border: 2px solid var(--accent-blue);">
+                <h4 style="color: var(--accent-blue); font-size: 1.3rem;">🎯 Recommandations Stratégiques</h4>
+                <ul class="insight-list">
+                    <li>
+                        <strong>Priorisation</strong> : Localisez d'abord en {{ stats.top_language }}, 
+                        puis dans les top 3-5 langues pour couvrir {{ stats.top_5_cumulative|floatformat:0 }}% du marché
+                    </li>
+                    <li>
+                        <strong>ROI Optimal</strong> : Le principe 80/20 s'applique - peu de langues = majorité de l'engagement
+                    </li>
+                    <li>
+                        <strong>Marchés de Niche</strong> : Les langues moins courantes offrent moins de concurrence
+                    </li>
+                    <li>
+                        <strong>Disponibilité ≠ Engagement</strong> : Concentrez-vous sur les langues où les joueurs sont actifs
+                    </li>
+                    <li>
+                        <strong>Budget Limité</strong> : Commencez avec {{ stats.top_language }}, ajoutez progressivement selon le succès
+                    </li>
+                </ul>
+                <p class="insight-note" style="border-top: 1px solid var(--card-border); padding-top: 1rem; margin-top: 1rem;">
+                    💡 <strong>Insight Clé</strong> : {{ stats.total_languages }} langues analysées, 
+                    mais seulement 3-5 langues sont nécessaires pour atteindre la majorité des joueurs. 
+                    La localisation stratégique est plus importante que la localisation exhaustive!
+                </p>
+            </div>
+
+            <!-- Back Button -->
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="{% url 'home' %}" class="show-charts-btn" style="display: inline-flex;">
+                    <span>← Retour à l'accueil</span>
+                </a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

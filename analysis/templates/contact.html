@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact - DataPlay</title>
+  <link rel="stylesheet" href="{% static 'styles.css' %}" />
+</head>
+
+<body class="auth-page">
+
+  <header class="header">
+    <div class="container">
+      <h1 class="logo-text"><a href="{% url 'home' %}">DataPlay</a></h1>
+      <nav class="nav">
+        <a href="{% url 'home' %}" class="nav-link">Accueil</a>
+        <a href="{% url 'connecter' %}" class="nav-link">Connexion</a>
+        <a href="{% url 'register' %}" class="nav-link">Inscription</a>
+        <a href="{% url 'contact' %}" class="nav-link active">Nous contacter</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="auth-container">
+    <div class="auth-title">
+      <h2>Contactez-nous</h2>
+      <p>Envoyez-nous votre message, nous vous répondrons rapidement.</p>
+    </div>
+
+    <div class="auth-card">
+      <div class="auth-card-inner">
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="auth-message {{ message.tags }}" style="display:block;">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <form class="auth-form" method="POST" action="{% url 'contact' %}">
+          {% csrf_token %}
+
+          <div class="auth-input-group">
+            <label for="name">Nom</label>
+            <input type="text" id="name" name="name" class="auth-input" placeholder="Votre nom" required />
+          </div>
+
+          <div class="auth-input-group">
+            <label for="email">Adresse email</label>
+            <input type="email" id="email" name="email" class="auth-input" placeholder="votre@email.com" required />
+          </div>
+
+          <div class="auth-input-group">
+            <label for="message">Votre message</label>
+            <textarea id="message" name="message" class="auth-input" placeholder="Décrivez votre demande..." rows="5" required></textarea>
+          </div>
+
+          <button type="submit" class="auth-submit-btn">
+            <span>Envoyer</span>
+          </button>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
+

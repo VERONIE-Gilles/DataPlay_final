@@ -1,0 +1,189 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>DataPlay - Genres et Tags Populaires</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo-container">
+                <a href="{% url 'home' %}" class="logo-button">
+                    <h1 class="logo-text">DataPlay</h1>
+                </a>
+            </div>
+            <nav class="nav">
+                <a href="{% url 'home' %}" class="nav-link">Accueil</a>
+                
+                
+                {% if user.is_authenticated %}
+                    <span class="nav-link" style="color: var(--accent-blue);">Bonjour, {{ user.first_name }}!</span>
+                    <form method="post" action="{% url 'logout' %}" style="margin: 0; display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link">Déconnexion</button>
+                    </form>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">📊 Genres et Tags Populaires</h2>
+
+            <!-- Statistics Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+                <div class="insight-card" style="text-align: center; background: var(--card-bg); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--card-border);">
+                    <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem; font-size: 0.95rem;">🎮 Genres Analysés</h4>
+                    <p style="font-size: 2rem; font-weight: bold; color: var(--text-white); margin: 0;">{{ stats.total_genres }}</p>
+                </div>
+                
+                <div class="insight-card" style="text-align: center; background: var(--card-bg); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--card-border);">
+                    <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem; font-size: 0.95rem;">🏷️ Tags Uniques</h4>
+                    <p style="font-size: 2rem; font-weight: bold; color: var(--text-white); margin: 0;">{{ stats.total_tags }}</p>
+                </div>
+                
+                <div class="insight-card" style="text-align: center; background: var(--card-bg); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--card-border);">
+                    <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem; font-size: 0.95rem;">🔥 Genre #1</h4>
+                    <p style="font-size: 1.5rem; font-weight: bold; color: var(--text-white); margin: 0;">{{ stats.most_popular_genre }}</p>
+                    <p style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">{{ stats.top_genre_count|floatformat:0 }} jeux</p>
+                </div>
+                
+                <div class="insight-card" style="text-align: center; background: var(--card-bg); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--card-border);">
+                    <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem; font-size: 0.95rem;">⭐ Tag #1</h4>
+                    <p style="font-size: 1.5rem; font-weight: bold; color: var(--text-white); margin: 0;">{{ stats.most_popular_tag }}</p>
+                    <p style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">{{ stats.top_tag_count|floatformat:0 }} jeux</p>
+                </div>
+            </div>
+
+            <!-- Chart 1: Genre Popularity (Weighted by Engagement) -->
+            <div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 15px; padding: 2rem; margin-bottom: 2rem;">
+                {{ chart1|safe }}
+            </div>
+            
+            <div class="insight-card">
+                <h4>💡 Points Clés : Engagement par Genre</h4>
+                <ul class="insight-list">
+                    <li>
+                        Le genre <strong>{{ stats.most_engaged_genre }}</strong> domine en termes d'engagement joueur
+                    </li>
+                    <li>
+                        L'engagement est mesuré par le <strong>nombre total de reviews</strong>, 
+                        reflétant l'intérêt réel des joueurs
+                    </li>
+                    <li>
+                        Les 3 genres en tête (en surbrillance cyan) représentent la majorité de l'activité
+                    </li>
+                    <li>
+                        Certains genres nichés ont peu de reviews malgré un nombre de jeux conséquent
+                    </li>
+                    <li>
+                        Cette métrique est plus révélatrice que le simple nombre de jeux disponibles
+                    </li>
+                </ul>
+                <p class="insight-note">
+                    💡 Ce graphique pondère par l'engagement - un genre avec moins de jeux mais très 
+                    populaires peut surpasser un genre avec beaucoup de jeux peu joués. 
+                    Survolez les barres pour voir les détails!
+                </p>
+            </div>
+
+            <!-- Chart 2: Genre Popularity by Count -->
+            <div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 15px; padding: 2rem; margin: 3rem 0 2rem 0;">
+                {{ chart2|safe }}
+            </div>
+
+            <div class="insight-card">
+                <h4>💡 Points Clés : Popularité par Nombre de Jeux</h4>
+                <ul class="insight-list">
+                    <li>
+                        <strong>{{ stats.most_popular_genre }}</strong> est le genre le plus représenté 
+                        avec {{ stats.top_genre_count|floatformat:0 }} jeux
+                    </li>
+                    <li>
+                        Cette vue montre la <strong>diversité de l'offre</strong> par genre
+                    </li>
+                    <li>
+                        Certains genres sont sur-représentés, reflétant les tendances de développement
+                    </li>
+                    <li>
+                        Les genres de niche ont souvent moins de titres mais des communautés fidèles
+                    </li>
+                    <li>
+                        La barre cyan indique le genre avec le plus grand catalogue de jeux
+                    </li>
+                </ul>
+                <p class="insight-note">
+                    💡 Comparez ce graphique avec le précédent : un grand nombre de jeux 
+                    ne garantit pas forcément un engagement élevé!
+                </p>
+            </div>
+
+            <!-- Chart 3: Top 20 Tags -->
+            <div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 15px; padding: 2rem; margin: 3rem 0 2rem 0;">
+                {{ chart3|safe }}
+            </div>
+
+            <div class="insight-card">
+                <h4>💡 Points Clés : Tags Populaires</h4>
+                <ul class="insight-list">
+                    <li>
+                        Le tag <strong>"{{ stats.most_popular_tag }}"</strong> apparaît sur 
+                        {{ stats.top_tag_count|floatformat:0 }} jeux
+                    </li>
+                    <li>
+                        Les tags reflètent les <strong>caractéristiques gameplay</strong> 
+                        plutôt que les genres traditionnels
+                    </li>
+                    <li>
+                        Les 5 tags en tête (cyan) sont présents sur la majorité des jeux indie
+                    </li>
+                    <li>
+                        Les tags permettent une <strong>catégorisation plus fine</strong> que les genres
+                    </li>
+                    <li>
+                        Certains tags comme "2D", "Singleplayer" sont très transversaux
+                    </li>
+                </ul>
+                <p class="insight-note">
+                    💡 Les tags sont assignés par la communauté Steam et reflètent 
+                    la perception réelle des joueurs. Un jeu peut avoir plusieurs tags!
+                </p>
+            </div>
+
+            <!-- Summary Insight -->
+            <div class="insight-card" style="margin-top: 3rem; background: linear-gradient(135deg, rgba(30, 144, 255, 0.15), rgba(0, 212, 255, 0.15)); border: 2px solid var(--accent-blue);">
+                <h4 style="color: var(--accent-blue); font-size: 1.3rem;">🎯 Synthèse de l'Analyse</h4>
+                <ul class="insight-list">
+                    <li>
+                        <strong>Diversité</strong> : {{ stats.total_genres }} genres et {{ stats.total_tags }} tags 
+                        montrent la richesse de l'écosystème indie
+                    </li>
+                    <li>
+                        <strong>Concentration</strong> : Quelques genres/tags dominent largement le marché
+                    </li>
+                    <li>
+                        <strong>Engagement vs Quantité</strong> : Le nombre de jeux ne prédit pas l'engagement joueur
+                    </li>
+                    <li>
+                        <strong>Opportunités</strong> : Les genres de niche offrent moins de concurrence
+                    </li>
+                    <li>
+                        <strong>Tendances</strong> : Les tags révèlent les mécaniques de gameplay préférées
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Back Button -->
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="{% url 'home' %}" class="show-charts-btn" style="display: inline-flex;">
+                    <span>← Retour à l'accueil</span>
+                </a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connexion Requise - DataPlay</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+  </head>
+  <body class="auth-page">
+    <header class="header">
+      <div class="container">
+        <h1 class="logo-text"><a href="{% url 'home' %}">DataPlay</a></h1>
+      </div>
+    </header>
+
+    <div class="auth-container" style="margin-top: 150px">
+      <div class="auth-card">
+        <div class="auth-card-inner">
+          <div class="popup-icon" style="margin: 0 auto 1.5rem">
+            <svg
+              width="80"
+              height="80"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
+              ></path>
+              <path d="M12 9V7a3 3 0 116 0v2"></path>
+            </svg>
+          </div>
+
+          <h3
+            class="popup-title"
+            style="text-align: center; margin-bottom: 1rem"
+          >
+            Connexion requise
+          </h3>
+          <p
+            class="popup-message"
+            style="text-align: center; margin-bottom: 2rem"
+          >
+            Veuillez vous connecter pour accéder à l'analyse complète des
+            données.
+          </p>
+
+          <div
+            class="popup-buttons"
+            style="display: flex; flex-direction: column; gap: 1rem"
+          >
+            <a
+              href="{% url 'connecter' %}?next={{ request.path }}"
+              class="popup-btn popup-btn-primary"
+            >
+              <span>Se connecter</span>
+            </a>
+            <a
+              href="{% url 'register' %}"
+              class="popup-btn popup-btn-secondary"
+            >
+              <span>Créer un compte</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

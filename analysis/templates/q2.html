@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>DataPlay - Coût des Jeux</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="logo-container">
+          <a href="{% url 'home' %}" class="logo-button">
+            <h1 class="logo-text">DataPlay</h1>
+          </a>
+        </div>
+        <nav class="nav">
+          <a href="{% url 'home' %}" class="nav-link">Accueil</a>
+          
+          {% if user.is_authenticated %}
+            <span class="nav-link" style="color: var(--accent-blue);">Bonjour, {{ user.first_name }}!</span>
+            <form method="post" action="{% url 'logout' %}" style="margin: 0; display: inline;">
+              {% csrf_token %}
+              <button type="submit" class="nav-link">Déconnexion</button>
+            </form>
+          {% endif %}
+        </nav>
+      </div>
+    </header>
+
+    <section class="features">
+      <div class="container">
+        <h2 class="section-title">Analyse des Prix</h2>
+
+        <!-- Statistics Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+          <div class="insight-card" style="text-align: center;">
+            <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">📊 Prix Médian</h4>
+            <p style="font-size: 2rem; font-weight: bold; color: var(--text-white); margin: 0;">€{{ stats.median_price|floatformat:2 }}</p>
+          </div>
+          
+          <div class="insight-card" style="text-align: center;">
+            <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">💵 Prix Moyen</h4>
+            <p style="font-size: 2rem; font-weight: bold; color: var(--text-white); margin: 0;">€{{ stats.average_price|floatformat:2 }}</p>
+          </div>
+          
+          <div class="insight-card" style="text-align: center;">
+            <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">🎮 Jeux Gratuits</h4>
+            <p style="font-size: 2rem; font-weight: bold; color: var(--text-white); margin: 0;">{{ stats.free_games|floatformat:0 }}</p>
+          </div>
+          
+          <div class="insight-card" style="text-align: center;">
+            <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">✅ Sous 10€</h4>
+            <p style="font-size: 2rem; font-weight: bold; color: var(--text-white); margin: 0;">{{ stats.percent_under_10|floatformat:0 }}%</p>
+          </div>
+        </div>
+
+        <!-- Chart 1: Histogram -->
+        {{ chart1|safe }}
+        
+        <div class="insight-card">
+          <h4>Enseignements clés : Jeux Payants</h4>
+          <ul class="insight-list">
+            <li>
+              La plupart des jeux indépendants payants sont proposés à un prix
+              <strong>inférieur à 10 €</strong>.
+            </li>
+            <li>
+              La plus forte concentration de prix se situe dans la tranche
+              allant de <strong>0 € à 4,99 €</strong>.
+            </li>
+            <li>
+              La fréquence des prix <strong>chute brutalement</strong> après le
+              seuil des 20 €.
+            </li>
+            <li>
+              Les jeux indés à prix élevé (30 € et plus) sont
+              <strong>très rares</strong> sur le marché.
+            </li>
+            <li>
+              La distribution des prix présente une
+              <strong>asymétrie positive</strong> (vers la droite), indiquant
+              l'existence de quelques exceptions coûteuses.
+            </li>
+          </ul>
+          <p class="insight-note">
+            💡 L'histogramme montre que le marché indé est ultra-compétitif sur
+            les petits prix. Passez votre souris sur le graphique pour voir les détails!
+          </p>
+        </div>
+
+        <!-- Chart 2: Price Buckets -->
+        {{ chart2|safe }}
+
+        <div class="insight-card">
+          <h4>Enseignements clés : Tranches de Prix (Gratuit + Payant)</h4>
+          <ul class="insight-list">
+            <li>
+              Une part importante des jeux indépendants est proposée en
+              <strong>Free-to-play</strong> (gratuit).
+            </li>
+            <li>
+              Les <strong>prix abordables</strong> dominent largement l'ensemble
+              du marché indépendant.
+            </li>
+            <li>
+              Les jeux vendus au-delà de 20 € ne représentent qu'une
+              <strong>infime fraction</strong> des sorties totales.
+            </li>
+            <li>
+              Les développeurs privilégient des
+              <strong>points d'entrée à bas prix</strong> pour attirer plus
+              facilement les joueurs.
+            </li>
+            <li>
+              Les jeux indés au prix "Premium" constituent
+              <strong>l'exception et non la règle</strong>.
+            </li>
+          </ul>
+          <p class="insight-note">
+            💡 Ce graphique confirme que l'accessibilité financière est une
+            stratégie clé pour les studios indés.
+          </p>
+        </div>
+
+        <!-- Back Button -->
+        <div style="text-align: center; margin-top: 3rem;">
+          <a href="{% url 'home' %}" class="show-charts-btn" style="display: inline-flex;">
+            <span>← Retour à l'accueil</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

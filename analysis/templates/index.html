@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DataPlay - Accueil</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="container">
+        <div class="logo-container">
+          <a href="{% url 'home' %}" class="logo-button">
+            <svg
+              class="octopus-logo"
+              viewBox="0 0 100 100"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="50"
+                cy="40"
+                r="25"
+                fill="#1e90ff"
+                class="octopus-head"
+              />
+              <circle cx="42" cy="35" r="4" fill="#fff" class="eye" />
+              <circle cx="58" cy="35" r="4" fill="#fff" class="eye" />
+              <circle cx="42" cy="35" r="2" fill="#000" />
+              <circle cx="58" cy="35" r="2" fill="#000" />
+              <path
+                d="M 35 65 Q 30 80 28 90"
+                stroke="#1e90ff"
+                stroke-width="4"
+                fill="none"
+                class="tentacle"
+              />
+              <path
+                d="M 40 65 Q 38 80 36 90"
+                stroke="#1e90ff"
+                stroke-width="4"
+                fill="none"
+                class="tentacle"
+              />
+              <path
+                d="M 45 65 Q 45 80 44 90"
+                stroke="#1e90ff"
+                stroke-width="4"
+                fill="none"
+                class="tentacle"
+              />
+              <path
+                d="M 50 65 Q 50 80 50 90"
+                stroke="#1e90ff"
+                stroke-width="4"
+                fill="none"
+                class="tentacle"
+              />
+              <path
+                d="M 55 65 Q 55 80 56 90"
+                stroke="#1e90ff"
+                stroke-width="4"
+                fill="none"
+                class="tentacle"
+              />
+              <path
+                d="M 60 65 Q 62 80 64 90"
+                stroke="#1e90ff"
+                stroke-width="4"
+                fill="none"
+                class="tentacle"
+              />
+              <path
+                d="M 65 65 Q 70 80 72 90"
+                stroke="#1e90ff"
+                stroke-width="4"
+                fill="none"
+                class="tentacle"
+              />
+            </svg>
+            <h1 class="logo-text">DataPlay</h1>
+          </a>
+        </div>
+  <nav class="nav">
+  <a href="{% url 'home' %}" class="nav-link active">Accueil</a>
+  <a href="{% url 'contact' %}" class="nav-link">Nous contacter</a>
+  
+
+  {% if user.is_authenticated %}
+    <span class="nav-link" style="color: var(--accent-blue);">Bonjour, {{ user.first_name }}!</span>
+    <form method="post" action="{% url 'logout' %}" style="margin: 0; display: inline;">
+      {% csrf_token %}
+      <button type="submit" class="nav-link">Déconnexion</button>
+    </form>
+  {% else %}
+    <a href="{% url 'connecter' %}" class="nav-link">Connexion</a>
+    <a href="{% url 'register' %}" class="nav-link">Inscription</a>
+  {% endif %}
+</nav>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+  <section class="hero">
+  <div class="container">
+    <h2 class="hero-title">Bienvenue sur DataPlay</h2>
+    <p class="hero-subtitle">
+      Explorez les statistiques et données du monde du gaming
+    </p>
+    <div class="hero-cards">
+      <a href="{% url 'q1' %}" class="hero-card">
+        <div class="card-icon">📊</div>
+        <h3>Genres et étiquettes populaires</h3>
+        <p>Découvrez les jeux les plus populaires</p>
+      </a>
+      <a href="{% url 'q2' %}" class="hero-card">
+        <div class="card-icon">💰</div>
+        <h3>Coût des Jeux</h3>
+        <p>Analysez les prix du marché</p>
+      </a>
+      <a href="{% url 'q3' %}" class="hero-card">
+        <div class="card-icon">👥</div>
+        <h3>Engagement par langue</h3>
+        <p>Analyse de l'engagement</p>
+      </a>
+    </div>
+  </div>
+  </section>
+
+   
+
+    <section class="features team-section">
+  <div class="container">
+    <h2 class="section-title">Notre Équipe</h2>
+    <div class="team-grid">
+      <!-- Nadir -->
+      <div class="team-card">
+        <div class="team-image-wrapper">
+          <img src="{% static 'images/nadir.jpg' %}" alt="Nadir" class="team-image" />
+        </div>
+        <div class="team-info">
+          <div class="team-header male">
+            <span class="team-icon">👨‍💼</span>
+            <h3 class="team-name">BAALI Nadir</h3>
+          </div>
+          <p class="team-role">Chef de projet</p>
+        </div>
+      </div>
+
+      <!-- Tarik -->
+      <div class="team-card">
+        <div class="team-image-wrapper">
+          <img src="{% static 'images/tarik.png' %}" alt="Tarik" class="team-image" />
+        </div>
+        <div class="team-info">
+          <div class="team-header male">
+            <span class="team-icon">🎨</span>
+            <h3 class="team-name">ANSEUR Tarik</h3>
+          </div>
+          <p class="team-role">Développeur Front-End</p>
+        </div>
+      </div>
+
+      <!-- Khaled -->
+      <div class="team-card">
+        <div class="team-image-wrapper">
+          <img src="{% static 'images/khaled.jpg' %}" alt="Khaled" class="team-image" />
+        </div>
+        <div class="team-info">
+          <div class="team-header male">
+            <span class="team-icon">⚙️</span>
+            <h3 class="team-name">KHALIL Khaled</h3>
+          </div>
+          <p class="team-role">Développeur Back-End</p>
+        </div>
+      </div>
+
+      <!-- Nouara -->
+      <div class="team-card">
+        <div class="team-image-wrapper">
+          <img src="{% static 'images/nouara.jpg' %}" alt="Nouara" class="team-image" />
+        </div>
+        <div class="team-info">
+          <div class="team-header female">
+            <span class="team-icon">👩‍💻</span>
+            <h3 class="team-name">HABRACHE Nouara</h3>
+          </div>
+          <p class="team-role">Testeuse</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map & Contact -->
+    <div class="contact-section" style="margin-top: 4rem; text-align: center;">
+      <h3 class="section-subtitle">Nous trouver à Paris</h3>
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.999873342833!2d2.292292615674377!3d48.85837307928714!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66efb6d17fdf9%3A0x7f0b5769a7c27d0!2sParis%2C%20France!5e0!3m2!1sfr!2sfr!4v1705731200000!5m2!1sfr!2sfr"
+        width="100%" height="400" style="border:0; border-radius:16px;" allowfullscreen="" loading="lazy"></iframe>
+      <p style="margin-top:1rem; font-size:1.2rem; color:var(--accent-blue);">
+        📞 +33 1 23 45 67 89
+      </p>
+    </div>
+  </div>
+</section>
+
+  
+  </body>
+</html>

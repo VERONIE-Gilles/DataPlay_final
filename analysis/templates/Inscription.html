@@ -1,0 +1,100 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inscription - DataPlay</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+  </head>
+  <body class="auth-page">
+    <header class="header">
+      <div class="container">
+        <h1 class="logo-text"><a href="{% url 'home' %}">DataPlay</a></h1>
+      </div>
+    </header>
+
+    <div class="auth-container">
+      <div class="auth-title">
+        <h2>Créer un compte</h2>
+        <p>Rejoignez DataPlay et explorez les données de jeux</p>
+      </div>
+
+      <div class="auth-card">
+        <div class="auth-card-inner">
+          <div class="auth-message error" id="errorMessage">
+            Une erreur s'est produite
+          </div>
+          {% if messages %}
+            {% for message in messages %}
+              <div class="auth-message error" style="display: block;">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+          
+
+          <form class="auth-form" method="POST" action="{% url 'register' %}">
+          {% csrf_token %}
+
+    <div class="auth-input-group">
+    <label for="name">Nom complet</label>
+    <input
+      type="text"
+      name="name"
+      id="name"
+      class="auth-input"
+      placeholder="Votre nom"
+      required
+    />
+  </div>
+
+  <div class="auth-input-group">
+    <label for="email">Adresse email</label>
+    <input
+      type="email"
+      name="email"
+      id="email"
+      class="auth-input"
+      placeholder="votre@email.com"
+      required
+    />
+  </div>
+
+  <div class="auth-input-group">
+    <label for="password">Mot de passe</label>
+    <input
+      type="password"
+      name="password"
+      id="password"
+      class="auth-input"
+      placeholder="••••••••"
+      required
+    />
+  </div>
+  <div class="auth-input-group">
+    <label for="password">Confirmer le mot de passe</label>
+    <input
+      type="password"
+      name="confirm_password"
+      id="confirmPassword"
+      class="auth-input"
+      required
+    />
+  </div>
+
+  <button type="submit" class="auth-submit-btn">
+    <span>S'inscrire</span>
+  </button>
+</form>
+          <div class="auth-footer">
+          Vous avez déjà un compte ?
+          <a href="{% url 'connecter' %}">Se connecter</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+   
+  </body>
+</html>
